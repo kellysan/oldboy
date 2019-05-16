@@ -21,40 +21,40 @@ class Base:
         with open(file) as f:
             return f.read().strip('\n')
 
-    @staticmethod
-    def name():
-        res = input("请输入员工\学生您的姓名：")
-        return res
-
-    @staticmethod
-    def age():
-        age_rgx = re.compile(r"\d{1,3}$")
-        res = input("请输入员工\学生的年龄：")
-        if age_rgx.match(res):
-            print(res)
-            return res
-        else:
-            print("输入的年龄不合法：")
-            exit(1)
-    @staticmethod
-    def position():
-        res = input("请输入员工的职位：")
-        return res
-
-
-    @staticmethod
-    def salary():
-        res = input("请输入员工的工资：")
-        return res
-
-    @staticmethod
-    def school_obj():
-        res = input("请输入员工所属校区：")
-        return res
-    @staticmethod
-    def dept():
-        res = input("请输入员工所属部门：")
-        return res
+    # @staticmethod
+    # def name():
+    #     res = input("请输入员工\学生您的姓名：")
+    #     return res
+    #
+    # @staticmethod
+    # def age():
+    #     age_rgx = re.compile(r"\d{1,3}$")
+    #     res = input("请输入员工\学生的年龄：")
+    #     if age_rgx.match(res):
+    #         print(res)
+    #         return res
+    #     else:
+    #         print("输入的年龄不合法：")
+    #         exit(1)
+    # @staticmethod
+    # def position():
+    #     res = input("请输入员工的职位：")
+    #     return res
+    #
+    #
+    # @staticmethod
+    # def salary():
+    #     res = input("请输入员工的工资：")
+    #     return res
+    #
+    # @staticmethod
+    # def school_obj():
+    #     res = input("请输入员工所属校区：")
+    #     return res
+    # @staticmethod
+    # def dept():
+    #     res = input("请输入员工所属部门：")
+    #     return res
 
 
 
@@ -77,35 +77,56 @@ class Database:
             return json.load(f)
 
 class Staff(Base):
-    def __init__(self):
-        self.name = self.name()
-        self.age = self.age()
-        self.position = self.position()
-        self.salary = self.salary()
-        self.dept = self.dept()
-        self.db = Database()
-        self.type = "staff"
-        self.user_info = self.db.db_select("user_info.json")
-        self.staff_info = {"age":self.age,
-                           "position":self.position,
-                           "salary":self.salary,
-                           "dept":self.dept,
-                           "type":self.type,
-                           "class":None,
-                           "school":{
-                               "school_name":None,
-                               "class":{}
-                               }
-                           }
-        self.user_info[self.name] = self.staff_info
-        self.db.db_insert('user_info.json', self.user_info)
+    def __init__(self, name):
+        self.name = name
+        self.b = Base()
+        self.d = Database()
+        user_info = self.d.db_select("user_info.json")
+        print(type(user_info))
+        if user_info[self.name].get("type") == "staff":
+            self.age = user_info[self.name].get("age")
+            self.salary = user_info[self.name].get("salary")
+            self.dept = user_info[self.name].get("dept")
+            self.position = user_info[self.name].get('position')
+            self.school_obj = user_info[self.name]["school"].get("school_name")
+            print(self.school_obj)
+
+        # self.age = self.age()
+        # self.position = self.position()
+        # self.salary = self.salary()
+        # self.dept = self.dept()
+        # self.db = Database()
+        # self.type = "staff"
+        # self.user_info = self.db.db_select("user_info.json")
+        # self.staff_info = {"age":self.age,
+        #                    "position":self.position,
+        #                    "salary":self.salary,
+        #                    "dept":self.dept,
+        #                    "type":self.type,
+        #                    "class":None,
+        #                    "school":{
+        #                        "school_name":None,
+        #                        "class":{}
+        #                        }
+        #                    }
+        # self.user_info[self.name] = self.staff_info
+        # self.db.db_insert('user_info.json', self.user_info)
 
 class Teacher(Staff):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name):
+        super().__init__(name)
 
     def teaching(self, class_obj):
         print("{}老师正在讲{}".format(self.name, class_obj))
+
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.d = Database()
+        user_info = self.d.db_select('user_info.json')
+        if user_info[self.name].get("type") == "student":
+            self.age = user_info[self.name]["name"]
+
 
 class Class:
     pass
@@ -115,7 +136,5 @@ class Course:
 
 
 if __name__ == '__main__':
-    #s = Staff()
-    shopping = [{"L1":2000}, {"L2":4000}, {"L3":4000}]
-    for i in enumerate(shopping):
-        print(i)
+    t = Teacher("张三")
+    t.teaching("L1")
