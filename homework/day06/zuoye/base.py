@@ -125,16 +125,25 @@ class Student:
         self.d = Database()
         user_info = self.d.db_select('user_info.json')
         if user_info[self.name].get("type") == "student":
-            self.age = user_info[self.name]["name"]
+            self.age = user_info[self.name]["age"]
+            self.degree = user_info[self.name]['degree']
+            self.class_obj = user_info[self.name]['class_obj']
+            self.balance = user_info[self.name]["balance"]
 
 
 class Class:
     pass
 
 class Course:
-    pass
+    def __init__(self, course_name):
+        self.course_name = course_name
+        self.d = Database()
+        user_info = self.d.db_select("course_info.json")
+        print(user_info)
+        self.price = user_info[self.course_name].get("price")
+        print(self.price)
+
 
 
 if __name__ == '__main__':
-    t = Teacher("张三")
-    t.teaching("L1")
+    C = Course("php")
