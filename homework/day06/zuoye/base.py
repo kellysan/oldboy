@@ -8,7 +8,24 @@
 #    Change Activity:  2019-05-15:
 
 import json
+import os
 import re
+
+class Message:
+
+    @staticmethod
+    def Welcome():
+        message = """
+                1. 登录
+                2. 注册
+                3. 注销
+                """
+        print(message)
+
+    def Staff(self):
+        message = """
+                1. 
+                  """
 
 class Base:
     @staticmethod
@@ -55,8 +72,6 @@ class Base:
     # def dept():
     #     res = input("请输入员工所属部门：")
     #     return res
-
-
 
 class Database:
 
@@ -130,7 +145,6 @@ class Student:
             self.class_obj = user_info[self.name]['class_obj']
             self.balance = user_info[self.name]["balance"]
 
-
 class Class:
     pass
 
@@ -144,6 +158,5 @@ class Course:
         print(self.price)
 
 
-
 if __name__ == '__main__':
-    C = Course("php")
+    pass
