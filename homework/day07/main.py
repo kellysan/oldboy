@@ -19,7 +19,7 @@ class Servcie:
 
     def run(self):
         while True:
-            self.message.Welcome()
+            self.message.welcome()
             num = int(input("请输入您要的操作："))
             if num == 1:
                 login()

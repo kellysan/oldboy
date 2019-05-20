@@ -65,27 +65,40 @@ class Base:
         return int(time.time())
 
 
-    @staticmethod
-    def md5_password(password):
+    def md5_password(self, password):
         obj = hashlib.md5()
         obj.update(password.encode("utf-8"))
         return obj.hexdigest()
 
     @staticmethod
     def name():
+        """
+        优化方向，将这些输入的功能单独出去
+        :return:
+        """
         res = input("请输入姓名：")
         return res
 
     @staticmethod
     def age():
         age_rgx = re.compile(r"\d{1,3}$")
-        res = input("请输入的年龄：")
-        if age_rgx.match(res):
-            print(res)
-            return res
-        else:
-            print("输入的年龄不合法：")
-            exit(1)
+        while True:
+            res = input("请输入的年龄：")
+            if age_rgx.match(res):
+                print(res)
+                return res
+            else:
+                print("输入的年龄不合法：")
+                continue
+
+    def password(self):
+        """
+        需要优化的功能 1 密码复杂度验证
+        :return: 返回加密密码
+        """
+        user_password = input("请输入用户密码")
+        return self.md5_password(user_password)
+
     @staticmethod
     def position():
         res = input("请输入员工的职位：")
@@ -107,33 +120,33 @@ class Base:
 
 class InfoMode(Base):
 
-    def create_mode(self, prefix, value):
+    def __create_mode(self, prefix, value):
         return dict(zip(prefix, value))
 
-    def info_mode(self, type):
+    def __info_mode(self, type):
         """
 
         :return: 根据输入的类型返回对应模板信息
         """
         if type == "staff":
-            prefix_list = ["password","login_count","age","position","ctime","type","class"]
+            prefix_list = ["password","login_count","age","position","ctime","mold","class"]
             value_list = [None, 0, None, None, self.get_timestamp, None, []]
-            return self.create_mode(prefix_list, value_list)
+            return self.__create_mode(prefix_list, value_list)
 
         elif type == "stu":
-            prefix_list = ["password","login_count","age","ctime","type","class", "ctime"]
+            prefix_list = ["password","login_count","age","ctime","mold","class", "ctime"]
             value_list = [None, 0, None, self.get_timestamp, "stu", [], self.get_timestamp]
-            return self.create_mode(prefix_list, value_list)
+            return self.__create_mode(prefix_list, value_list)
 
         elif type == "course":
             prefix_list = ["price", "hour", "outline", "ctime"]
             value_list = [None, None, [], self.get_timestamp]
-            return self.create_mode(prefix_list, value_list)
+            return self.__create_mode(prefix_list, value_list)
 
         elif type == "class":
             prefix_list = ["semester", "course", "teacher", "student", "ctime"]
             value_list = [None, None, [], [], self.get_timestamp]
-            return  self.create_mode(prefix_list, value_list)
+            return  self.__create_mode(prefix_list, value_list)
 
 
     def write_info_to_dict(self, type, *args, **kwargs):
@@ -148,17 +161,33 @@ class InfoMode(Base):
             print("没有指定生成模板类型，请添加type类型")
             exit(1)
         if type == "staff":
-            staff_dict = self.info_mode(type)
+            staff_dict = self.__info_mode(type)
             staff_dict["password"] = kwargs["password"]
             staff_dict["age"] = kwargs["age"]
             staff_dict["position"] = kwargs["position"]
-            staff_dict["type"] = kwargs["type"]
+            staff_dict["mold"] = kwargs["mold"]
             return staff_dict
 
         elif type == "stu":
-            stu_dict = self.type_mode(type)
+            stu_dict = self.__info_mode(type)
             stu_dict["password"] = kwargs["password"]
             stu_dict["age"] = kwargs["age"]
+            return stu_dict
+
+        elif type == "course":
+            course_dict = self.__info_mode(type)
+            course_dict["price"] = kwargs["price"]
+            course_dict["hour"] = kwargs["hour"]
+            course_dict["outline"] = kwargs["outline"]
+            return course_dict
+
+        elif type == "class":
+            class_dict = self.__info_mode(type)
+            class_dict["semester"] = kwargs["semester"]
+            class_dict["course"] = kwargs["course"]
+            class_dict["teacher"] = kwargs["teacher"]
+            class_dict["student"] = kwargs["student"]
+            return class_dict
 
 class Database:
 
@@ -179,5 +208,7 @@ class Database:
             return json.load(f)
 
 if __name__ == '__main__':
-    s = Service()
-    print(s.write_info(type="class"))
+    pass
+    # s = InfoMode()
+    # print(s.write_info_to_dict("class",semester=12,teacher="alex",student="stu1", course="python"))
+
