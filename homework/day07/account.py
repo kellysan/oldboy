@@ -7,9 +7,10 @@
 #    date：            2019-05-17
 #    Change Activity:  2019-05-17:
 
+import os
+from base import Database
+from wrapper import  account,check_count
 
-from homework.day06.zuoye.base import Database
-from homework.day06.zuoye.wrapper import  account,check_count
 db = Database()
 
 
@@ -55,3 +56,37 @@ def login(user_name, user_password, count):
         # 写入数据
         db.db_insert("user_info.json", user_info)
         return False, count
+
+
+
+def register(name, password):
+    """
+    注册用户，并将数据写入信息数据库，并创建登录锁，表示系统已经登录
+    :param name: 注册用户
+    :param password: 注册密码
+    :return: 成功返回 True 存在返回 False
+    """
+    # 获取的注册的user信息
+    user_register = db.db_select("user_info.json")
+
+    # 定义一个用户注册信息模板
+    user_info_dict = {"password": password, "login_count": 0}
+
+    # 将用户信息写入注册信息字典
+    user_register[name] = user_info_dict
+
+    # 把用户信息写入文件中
+    write_json(user_register)
+
+    # 创建用户登录的锁文件，要求注册即登录
+    create_login_lock_file(name)
+
+    # 提示注册成功
+    print("{}用户注册成功.".format(name))
+    return True
+
+def logout():
+    with open('login.lock', "r") as f:
+        name = f.read().split('\n')
+    os.remove('login.lock')
+    print("{}用户已经注销".format(name))
