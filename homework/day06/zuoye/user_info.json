@@ -1,1 +1,1 @@
-{"张三":{"age": "34", "position": "teacher", "salary": "1000", "dept": "IT", "type": "staff", "school": {"school_name": "shanghai", "class":["c1","c2"]}},"李四":{"age":18,"degree":"学士","type":"student","class_obj":["c1","c2"],"balance":100000}}
+{"张三": {"password": "123456", "login_count": 0, "age": "34", "position": "teacher", "salary": "1000", "dept": "IT", "type": "staff", "school": {"school_name": "shanghai", "class": ["c1", "c2"]}}, "李四": {"password": "123456", "login_count": 0, "age": 18, "degree": "学士", "type": "student", "class_obj": ["c1", "c2"], "balance": 100000}}
