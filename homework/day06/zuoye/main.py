@@ -6,7 +6,7 @@
 #    Author :          SanYapeng
 #    date：            2019-05-17
 #    Change Activity:  2019-05-17:
-
+import os
 from homework.day06.zuoye.base import Database,Base,Message
 from homework.day06.zuoye import school
 from homework.day06.zuoye.user import login
@@ -16,9 +16,19 @@ class Servcie:
         self.db = Database()
         self.message = Message()
 
+
     def run(self):
-        self.message.Welcome()
-        login()
+        while True:
+            self.message.Welcome()
+            num = int(input("请输入您要的操作："))
+            if num == 1:
+                login()
+            elif num == 2:
+                pass
+            elif num == 3:
+                self.b.logout()
+
+
 
 
 if __name__ == '__main__':

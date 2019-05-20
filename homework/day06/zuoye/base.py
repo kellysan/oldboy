@@ -16,6 +16,7 @@ class Message:
     @staticmethod
     def Welcome():
         message = """
+        欢迎来到老男孩北京校区学员信息管理系统
                 1. 登录
                 2. 注册
                 3. 注销
@@ -37,6 +38,13 @@ class Base:
     def read_file(file):
         with open(file) as f:
             return f.read().strip('\n')
+
+    @staticmethod
+    def logout():
+        with open('login.lock', "r") as f:
+            name = f.read().split('\n')
+        os.remove('login.lock')
+        print("{}用户已经注销".format(name))
 
     # @staticmethod
     # def name():
