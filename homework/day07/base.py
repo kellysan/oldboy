@@ -135,14 +135,19 @@ class Base:
         res = input("请输入员工的工资：")
         return res
 
+    # @staticmethod
+    # def school_obj():
+    #     res = input("请输入员工所属校区：")
+    #     return res
+    # @staticmethod
+    # def dept():
+    #     res = input("请输入员工所属部门：")
+    #     return res
     @staticmethod
-    def school_obj():
-        res = input("请输入员工所属校区：")
-        return res
-    @staticmethod
-    def dept():
-        res = input("请输入员工所属部门：")
-        return res
+    def allot_class():
+        str_class = input("请您输入要分配的班级")
+        return str_class
+
 
     def check_login_account_mold(self):
         account = self.read_file("login.lock")
@@ -150,7 +155,6 @@ class Base:
         mold = user_info[account]["mold"]
         print(mold)
         return mold
-
 
 
 
@@ -182,8 +186,8 @@ class InfoMode(Base):
             return self.__create_mode(prefix_list, value_list)
 
         elif type == "class":
-            prefix_list = ["semester", "course", "teacher", "student", "ctime"]
-            value_list = [None, None, [], [], self.get_timestamp]
+            prefix_list = ["course", "teacher", "student", "ctime"]
+            value_list = [None, [], [], self.get_timestamp]
             return  self.__create_mode(prefix_list, value_list)
 
 
@@ -221,10 +225,7 @@ class InfoMode(Base):
 
         elif type == "class":
             class_dict = self.__info_mode(type)
-            class_dict["semester"] = kwargs["semester"]
             class_dict["course"] = kwargs["course"]
-            class_dict["teacher"] = kwargs["teacher"]
-            class_dict["student"] = kwargs["student"]
             return class_dict
 
 class Database:

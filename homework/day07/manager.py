@@ -88,7 +88,7 @@ class Manager:
                                                                                         outline=[])
                                 # 将信息写入数据库
                                 self.db.db_insert("course_info.json", course_info)
-
+                                print("\t\t\t{}课程信息已经创建".format(course_name))
                                 return True
                             else:
                                 print("您输入的课程时长不合理，时长必须是2位以内数字")
@@ -102,6 +102,7 @@ class Manager:
         :return:
         """
         class_info = self.db.db_select("class_info.json")
+        course_info = self.db.db_select("course_info.json")
 
         while True:
             class_name = input("请输入班级名称")
@@ -109,9 +110,22 @@ class Manager:
                 print("该班级已经存在，请重新输入")
                 continue
             else:
-                class_info[class_name] = self.info.write_info_to_dict(type="class")
-                self.db.db_insert("class_info.json", class_info)
-                return True
+                course_name_list = []
+                for c in course_info:
+                    course_name_list.append(c)
+                print("课程列表：{}".format("||".join(course_name_list)))
+                print("\n")
+                print("###" * 10)
+                while True:
+                    course_name = input("请输入课程名称：")
+                    if course_name in course_info:
+                        class_info[class_name] = self.info.write_info_to_dict(type="class",
+                                                                              course=course_name)
+                        self.db.db_insert("class_info.json", class_info)
+                        return True
+                    else:
+                        print("您输入的课程名称有误，请重新输入：")
+                        continue
 
     def select_all_course(self):
         """
@@ -156,17 +170,19 @@ class Manager:
             class_name_list = []
             for c in class_info:
                 class_name_list.append(c)
-            print("###" * 50)
+            print("###" * 10)
+            print("\n")
             print("班级列表：{}".format('||'.join(class_name_list)))
-            print("###" * 50)
+            print("###" * 10)
+            print("\n")
 
             if type == "stu":
                 stu_name_list = []
                 for n in user_info:
-                    if user_info[n].get("type") == "stu":
+                    if user_info[n].get("mold") == "stu":
                         stu_name_list.append(n)
                 print("学生列表:{}".format('||'.join(stu_name_list)))
-                print("###" * 50)
+                print("###" * 10)
 
                 stu_name = self.b.name()
                 class_name = self.b.allot_class()
@@ -187,12 +203,12 @@ class Manager:
             elif type == "teacher":
                 teacher_name_list = []
                 for n in user_info:
-                    if user_info[n] == "teacher":
+                    if user_info[n].get("mold") == "teacher":
                         teacher_name_list.append(n)
 
-                print("###" * 50)
+
                 print("老师列表:{}".format('||'.join(teacher_name_list)))
-                print("###" * 50)
+                print("###" * 10)
 
                 teacher_name = self.b.name()
                 class_name = self.b.allot_class()
@@ -212,11 +228,6 @@ class Manager:
             else:
                 print("请指定正确的类型")
                 continue
-
-
-
-
-
 
 
 
