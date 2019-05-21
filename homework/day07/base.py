@@ -11,6 +11,7 @@ import json
 import re
 import time
 import hashlib
+import os
 
 class Message:
 
@@ -49,14 +50,25 @@ class Message:
         """
         print(message)
 
-class Base:
     @staticmethod
-    def write_file(file, file_info):
+    def student():
+        message = """
+        1. 查看所有课程
+        2. 选择课程
+        3. 查看所选课程
+        4. 退出程序
+        """
+        print(message)
+
+class Base:
+    def __init__(self):
+        self.db = Database()
+
+    def write_file(self, file, file_info):
         with open(file, "2") as f:
             f.write(file_info)
 
-    @staticmethod
-    def read_file(file):
+    def read_file(self, file):
         with open(file) as f:
             return f.read().strip('\n')
 
@@ -64,11 +76,25 @@ class Base:
     def get_timestamp(self):
         return int(time.time())
 
-
-    def md5_password(self, password):
+    @staticmethod
+    def md5_password(password):
         obj = hashlib.md5()
         obj.update(password.encode("utf-8"))
         return obj.hexdigest()
+
+    @staticmethod
+    def num():
+
+        num_rgx = re.compile(r"(\d{1}$|10)")
+        while True:
+            num = input("请您输入操作选项")
+            if num_rgx.match(num):
+                return int(num)
+            else:
+                print("您输入的选项有误，操作选项必须是数字，请重新输入:")
+                continue
+
+
 
     @staticmethod
     def name():
@@ -76,7 +102,7 @@ class Base:
         优化方向，将这些输入的功能单独出去
         :return:
         """
-        res = input("请输入姓名：")
+        res = input("请输入姓名：").strip().lower()
         return res
 
     @staticmethod
@@ -90,14 +116,14 @@ class Base:
             else:
                 print("输入的年龄不合法：")
                 continue
-
-    def password(self):
+    @staticmethod
+    def password():
         """
         需要优化的功能 1 密码复杂度验证
         :return: 返回加密密码
         """
         user_password = input("请输入用户密码")
-        return self.md5_password(user_password)
+        return Base.md5_password(user_password)
 
     @staticmethod
     def position():
@@ -118,6 +144,18 @@ class Base:
         res = input("请输入员工所属部门：")
         return res
 
+    def check_login_account_mold(self):
+        account = self.read_file("login.lock")
+        user_info = self.db.db_select("user_info.json")
+        mold = user_info[account]["mold"]
+        print(mold)
+        return mold
+
+
+
+
+
+
 class InfoMode(Base):
 
     def __create_mode(self, prefix, value):
@@ -134,8 +172,8 @@ class InfoMode(Base):
             return self.__create_mode(prefix_list, value_list)
 
         elif type == "stu":
-            prefix_list = ["password","login_count","age","ctime","mold","class", "ctime"]
-            value_list = [None, 0, None, self.get_timestamp, "stu", [], self.get_timestamp]
+            prefix_list = ["password","login_count","age","ctime","mold","class", "course"]
+            value_list = [None, 0, None, self.get_timestamp, "stu", [], []]
             return self.__create_mode(prefix_list, value_list)
 
         elif type == "course":
@@ -209,6 +247,5 @@ class Database:
 
 if __name__ == '__main__':
     pass
-    # s = InfoMode()
-    # print(s.write_info_to_dict("class",semester=12,teacher="alex",student="stu1", course="python"))
-
+    # b = Base()
+    # b.check_login_account_mold()
