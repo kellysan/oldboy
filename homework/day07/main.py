@@ -32,21 +32,21 @@ class Servcie:
                         if num == 1:
                             self.manager.create_course()
                         elif num == 2:
-                            pass
+                            self.manager.create_account('stu')
                         elif num == 3:
-                            pass
+                            self.manager.select_all_course()
                         elif num == 4:
-                            pass
+                            self.manager.select_all_student()
                         elif num == 5:
-                            pass
+                            self.manager.select_all_student_course()
                         elif num == 6:
-                            pass
+                            self.manager.create_account("teacher")
                         elif num == 7:
-                            pass
+                            self.manager.allot_class("teacher")
                         elif num == 8:
-                            pass
+                            self.manager.create_class()
                         elif num == 9:
-                            pass
+                            self.manager.allot_class("stu")
                         elif num == 10:
                             pass
                         else:

@@ -67,6 +67,7 @@ class Manager:
         course_info = self.db.db_select("course_info.json")
         price_rgx = re.compile(r"\d{1,5}$")
         hour_rgx = re.compile(r"\d{1,2}$")
+
         while True:
             course_name = input("请输入课程名称")
             if course_name in course_info:
@@ -102,6 +103,16 @@ class Manager:
         """
         class_info = self.db.db_select("class_info.json")
 
+        while True:
+            class_name = input("请输入班级名称")
+            if class_name in class_info:
+                print("该班级已经存在，请重新输入")
+                continue
+            else:
+                class_info[class_name] = self.info.write_info_to_dict(type="class")
+                self.db.db_insert("class_info.json", class_info)
+                return True
+
     def select_all_course(self):
         """
         查看所有课程
@@ -124,59 +135,83 @@ class Manager:
                                                          user_info[name].get("age"),
                                                          '|'.join(user_info[name].get("class"))))
 
+    def select_all_student_course(self):
+        """
+        查看所有学生选课情况
+        :return:
+        """
+        student_info = self.db.db_select("user_info.json")
+        for user in student_info:
+            if student_info[user].get("mold") == "stu":
+                print("学生姓名:{};\t学生课程:{}".format(user, '|'.join(student_info[user].get("course"))))
 
+    def allot_class(self, type):
+        user_info = self.db.db_select("user_info.json")
+        class_info = self.db.db_select("class_info.json")
+        course_info = self.db.db_select("course_info.json")
 
+        # 判断是学生还是老师
+        while True:
+            # 查看所有班级
+            class_name_list = []
+            for c in class_info:
+                class_name_list.append(c)
+            print("###" * 50)
+            print("班级列表：{}".format('||'.join(class_name_list)))
+            print("###" * 50)
 
+            if type == "stu":
+                stu_name_list = []
+                for n in user_info:
+                    if user_info[n].get("type") == "stu":
+                        stu_name_list.append(n)
+                print("学生列表:{}".format('||'.join(stu_name_list)))
+                print("###" * 50)
 
+                stu_name = self.b.name()
+                class_name = self.b.allot_class()
+                if stu_name in user_info and class_name in class_info and user_info[stu_name].get("mold") == type:
 
+                    # 组合学生信息
+                    user_info[stu_name]["class"].append(class_name)
+                    class_info[class_name]["student"].append(stu_name)
 
+                    #将信息写入数据库
+                    self.db.db_insert("user_info.json", user_info)
+                    self.db.db_insert("class_info.json", class_info)
+                    return True
+                else:
+                    print("输入的信息有误{}学生或{}课程未录入信息数据库".format(stu_name, class_name))
+                    continue
 
+            elif type == "teacher":
+                teacher_name_list = []
+                for n in user_info:
+                    if user_info[n] == "teacher":
+                        teacher_name_list.append(n)
 
+                print("###" * 50)
+                print("老师列表:{}".format('||'.join(teacher_name_list)))
+                print("###" * 50)
 
+                teacher_name = self.b.name()
+                class_name = self.b.allot_class()
+                if teacher_name in user_info and class_name in class_info and user_info[teacher_name].get("mold") == "teacher":
 
+                    # 组合老师信息
+                    user_info[teacher_name]["class"].append(class_name)
+                    class_info[class_name]["teacher"].append(teacher_name)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    # 将信息写入数据库
+                    self.db.db_insert("user_info.json", user_info)
+                    self.db.db_insert("class_info.json", class_info)
+                    return True
+                else:
+                    print("输入的信息有误{}学生或{}课程未录入信息数据库".format(teacher_name, class_name))
+                    continue
+            else:
+                print("请指定正确的类型")
+                continue
 
 
 
@@ -187,4 +222,4 @@ class Manager:
 
 if __name__ == '__main__':
     m = Manager()
-    print(m.select_all_student())
+    print(m.create_account("teacher"))
