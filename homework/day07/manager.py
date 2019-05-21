@@ -19,7 +19,6 @@ class Manager:
         self.info = InfoMode()
         self.user_file = "user_info.json"
 
-    @check_login_status
     def create_account(self, type):
         """
 
@@ -60,7 +59,6 @@ class Manager:
                     print("添加{}讲师成功".format(name))
                     return True
 
-    @check_login_status
     def create_course(self):
         """
         为了写的简单点，没有加入课程大纲，但是模板字典已经设置了这个选选项
@@ -97,9 +95,96 @@ class Manager:
                     else:
                         print("您输入的价格不合理，价格必须是5位以内数字")
                         continue
+    def create_class(self):
+        """
+        创建班级
+        :return:
+        """
+        class_info = self.db.db_select("class_info.json")
+
+    def select_all_course(self):
+        """
+        查看所有课程
+        :return:
+        """
+        course_info = self.db.db_select("course_info.json")
+        for name in course_info:
+            print("课程名称：{};\t课程价格：{};\t课程周期：{}天".format(name,
+                                                              course_info[name]["price"],
+                                                              course_info[name]["hour"]))
+    def select_all_student(self):
+        """
+        查看所有学生信息
+        :return:
+        """
+        user_info = self.db.db_select("user_info.json")
+        for name in user_info:
+            if user_info[name].get("mold") == "stu":
+                print("学生姓名：{};\t学生年龄:{};学生班级：{}".format(name,
+                                                         user_info[name].get("age"),
+                                                         '|'.join(user_info[name].get("class"))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 if __name__ == '__main__':
     m = Manager()
-    print(m.create_course())
+    print(m.select_all_student())
