@@ -155,10 +155,16 @@ class Manager:
         :return:
         """
         student_info = self.db.db_select("user_info.json")
-        for user in student_info:
-            if student_info[user].get("mold") == "stu":
-                print("学生姓名:{};\t学生课程:{}".format(user, '|'.join(student_info[user].get("course"))))
-
+        if len(student_info) > 1:
+            for user in student_info:
+                if student_info[user].get("mold") == "stu":
+                    print(student_info[user].get("course"))
+                    if len(student_info[user].get("course")) > 0:
+                        print("学生姓名:{};\t学生课程:{}".format(user, '|'.join(student_info[user].get("course"))))
+                    else:
+                        print("{}同学没有课程".format(user))
+        else:
+            print("没有学生报名,请添加学生")
     def allot_class(self, type):
         user_info = self.db.db_select("user_info.json")
         class_info = self.db.db_select("class_info.json")

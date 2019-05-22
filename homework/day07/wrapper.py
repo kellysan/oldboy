@@ -12,6 +12,7 @@ from base import Base, Database
 
 db = Database()
 
+
 def account(flag):
     def wrapper(func):
         def inner_wrapper(*args, **kwargs):
@@ -49,11 +50,11 @@ def check_count(func):
         while count <= 3:
             res = func(count)
             if res[0]:
-                break
+                return res[0]
+                # break
             else:
                 count = res[1]
                 continue
-
     return wrapper
 
 
