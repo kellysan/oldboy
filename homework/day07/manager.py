@@ -127,7 +127,7 @@ class Manager:
                         print("您输入的课程名称有误，请重新输入：")
                         continue
 
-    def select_all_course(self):
+    def examine_all_course(self):
         """
         查看所有课程
         :return:
@@ -137,7 +137,7 @@ class Manager:
             print("课程名称：{};\t课程价格：{};\t课程周期：{}天".format(name,
                                                               course_info[name]["price"],
                                                               course_info[name]["hour"]))
-    def select_all_student(self):
+    def examine_all_student(self):
         """
         查看所有学生信息
         :return:
@@ -149,7 +149,7 @@ class Manager:
                                                          user_info[name].get("age"),
                                                          '|'.join(user_info[name].get("class"))))
 
-    def select_all_student_course(self):
+    def examine_all_student_course(self):
         """
         查看所有学生选课情况
         :return:

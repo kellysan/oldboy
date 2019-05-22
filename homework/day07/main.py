@@ -7,9 +7,11 @@
 #    date：            2019-05-17
 #    Change Activity:  2019-05-17:
 import os
+import student
 from base import Database, Base, Message
 from manager import Manager
 from account import login, logout
+
 class Servcie:
     def __init__(self):
         self.b = Base()
@@ -24,7 +26,8 @@ class Servcie:
             num = self.b.num()
             if num == 1:
                 login()
-                mold = self.b.check_login_account_mold()
+                # 在登录的时候会写入一个lock文件，lock文件中记录着这次登录的是谁
+                mold = self.b.check_login_account("mold")
                 if mold == "admin":
                     while True:
                         self.message.admin()
@@ -34,11 +37,11 @@ class Servcie:
                         elif num == 2:
                             self.manager.create_account('stu')
                         elif num == 3:
-                            self.manager.select_all_course()
+                            self.manager.examine_all_course()
                         elif num == 4:
-                            self.manager.select_all_student()
+                            self.manager.examine_all_student()
                         elif num == 5:
-                            self.manager.select_all_student_course()
+                            self.manager.examine_all_student_course()
                         elif num == 6:
                             self.manager.create_account("teacher")
                         elif num == 7:
@@ -57,13 +60,14 @@ class Servcie:
                         self.message.student()
                         num = self.b.num()
                         if num == 1:
-                            pass
+                            student.examine_all_course()
                         elif num == 2:
-                            pass
+                            student.select_course()
                         elif num == 3:
-                            pass
+                            student.examine_select_course()
                         elif num == 4:
-                            pass
+                            logout()
+                            break
                         else:
                             print("您输入的选项有误，请重新输入")
                             continue
@@ -83,13 +87,11 @@ class Servcie:
                             print("您输入的选项有误，请重新输入")
                             continue
             elif num == 2:
-                pass
+                print("注册功能未开放！:)")
+                continue
             elif num == 3:
                 logout()
                 continue
-
-
-
 
 if __name__ == '__main__':
     s = Servcie()
