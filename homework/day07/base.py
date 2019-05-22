@@ -149,16 +149,18 @@ class Base:
         return str_class
 
 
-    def check_login_account_mold(self):
+    def check_login_account(self, type):
+        """
+        根据type 类型检测返回需要的结果
+        :param type: name 登录用户，mold 返回用户类型
+        :return:
+        """
         account = self.read_file("login.lock")
         user_info = self.db.db_select("user_info.json")
-        mold = user_info[account]["mold"]
-        print(mold)
-        return mold
-
-
-
-
+        if type == "mold":
+            return user_info[account][type]
+        if type == "name":
+            return account
 
 class InfoMode(Base):
 
@@ -247,6 +249,5 @@ class Database:
             return json.load(f)
 
 if __name__ == '__main__':
-    pass
-    # b = Base()
-    # b.check_login_account_mold()
+    b = Base()
+    print(b.check_login_account("name"))
