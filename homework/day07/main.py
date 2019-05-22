@@ -54,7 +54,8 @@ class Servcie:
                             elif num == 9:
                                 self.manager.allot_class("stu")
                             elif num == 10:
-                                pass
+                                logout()
+                                break
                             else:
                                 print("您输入的选项有误，请重新输入")
                                 continue
