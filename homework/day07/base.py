@@ -21,7 +21,6 @@ class Message:
         欢迎来到老男孩学员信息管理系统
                 1. 登录
                 2. 注册
-                3. 注销
                 """
         print(message)
 
@@ -144,7 +143,7 @@ class Base:
     #     res = input("请输入员工所属部门：")
     #     return res
     @staticmethod
-    def allot_class():
+    def allot_class_name():
         str_class = input("请您输入要分配的班级")
         return str_class
 
@@ -250,4 +249,4 @@ class Database:
 
 if __name__ == '__main__':
     b = Base()
-    print(b.check_login_account("name"))
+    print(b.all_class("stu"))

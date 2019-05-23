@@ -19,6 +19,33 @@ class Manager:
         self.info = InfoMode()
         self.user_file = "user_info.json"
 
+
+    def __all_class(self, type, stu_name=None):
+        user_info = self.db.db_select("user_info.json")
+        class_info = self.db.db_select("class_info.json")
+        class_name_list = []
+        if type == "stu":
+            for c in class_info:
+                if class_info[c].get("course") in user_info[stu_name].get("course") and len(class_info[c].get("student")) < 30:
+                    class_name_list.append(c)
+
+            print("班级列表".center(6,'#'))
+            print("{}".format('|'.join(class_name_list)))
+            print("班级列表".center(6,'#'))
+
+            return class_name_list
+        elif type == "teacher":
+            for c in class_info:
+                class_name_list.append(c)
+
+            print("班级列表".center(6,'#'))
+            print("{}".format('|'.join(class_name_list)))
+            print("班级列表".center(6,'#'))
+            return class_name_list
+
+
+
+
     def create_account(self, type):
         """
 
@@ -122,6 +149,7 @@ class Manager:
                         class_info[class_name] = self.info.write_info_to_dict(type="class",
                                                                               course=course_name)
                         self.db.db_insert("class_info.json", class_info)
+                        print("创建{}班级成功，课程名称为：{}".format(class_name, course_name))
                         return True
                     else:
                         print("您输入的课程名称有误，请重新输入：")
@@ -158,7 +186,6 @@ class Manager:
         if len(student_info) > 1:
             for user in student_info:
                 if student_info[user].get("mold") == "stu":
-                    print(student_info[user].get("course"))
                     if len(student_info[user].get("course")) > 0:
                         print("学生姓名:{};\t学生课程:{}".format(user, '|'.join(student_info[user].get("course"))))
                     else:
@@ -172,26 +199,25 @@ class Manager:
 
         # 判断是学生还是老师
         while True:
-            # 查看所有班级
-            class_name_list = []
-            for c in class_info:
-                class_name_list.append(c)
-            print("###" * 10)
-            print("\n")
-            print("班级列表：{}".format('||'.join(class_name_list)))
-            print("###" * 10)
-            print("\n")
+
+
 
             if type == "stu":
                 stu_name_list = []
                 for n in user_info:
                     if user_info[n].get("mold") == "stu":
                         stu_name_list.append(n)
-                print("学生列表:{}".format('||'.join(stu_name_list)))
-                print("###" * 10)
+                print("学生列表".center(20, '#'))
+                print("{}".format('|'.join(stu_name_list)))
+                print("学生列表".center(20, '#'))
 
                 stu_name = self.b.name()
-                class_name = self.b.allot_class()
+
+                # 输入学生姓名，打印学生可以选择的班级列表
+                self.__all_class(type, stu_name)
+
+                #输入班级信息
+                class_name = self.b.allot_class_name()
                 if stu_name in user_info and class_name in class_info and user_info[stu_name].get("mold") == type:
 
                     # 组合学生信息
@@ -201,23 +227,25 @@ class Manager:
                     #将信息写入数据库
                     self.db.db_insert("user_info.json", user_info)
                     self.db.db_insert("class_info.json", class_info)
+                    print("{}学生分配的班级为{}".format(stu_name, class_name))
                     return True
                 else:
                     print("输入的信息有误{}学生或{}课程未录入信息数据库".format(stu_name, class_name))
                     continue
 
             elif type == "teacher":
+                self.__all_class(type)
                 teacher_name_list = []
                 for n in user_info:
                     if user_info[n].get("mold") == "teacher":
                         teacher_name_list.append(n)
 
-
-                print("老师列表:{}".format('||'.join(teacher_name_list)))
-                print("###" * 10)
+                print("老师列表".center(20, '#'))
+                print("{}".format('|'.join(teacher_name_list)))
+                print("老师列表".center(20, '#'))
 
                 teacher_name = self.b.name()
-                class_name = self.b.allot_class()
+                class_name = self.b.allot_class_name()
                 if teacher_name in user_info and class_name in class_info and user_info[teacher_name].get("mold") == "teacher":
 
                     # 组合老师信息
@@ -227,6 +255,7 @@ class Manager:
                     # 将信息写入数据库
                     self.db.db_insert("user_info.json", user_info)
                     self.db.db_insert("class_info.json", class_info)
+                    print("{}老师分配的班级为{}".format(teacher_name, class_name))
                     return True
                 else:
                     print("输入的信息有误{}学生或{}课程未录入信息数据库".format(teacher_name, class_name))

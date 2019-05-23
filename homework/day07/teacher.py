@@ -32,8 +32,12 @@ def examine_allot_class():
     """
     user_name = b.check_login_account("name")
     user_info = db.db_select("user_info.json")
-    print("您所分配的班级:{}".format("|".join(user_info[user_name].get("class"))))
-    return True
+    if len(user_info[user_name].get("class")) == 0:
+        print("{}老师还没有分配班级，请联系管理员".format(user_name))
+        return False
+    else:
+        print("您所分配的班级:{}".format("|".join(user_info[user_name].get("class"))))
+        return True
 
 def examine_all_class_student():
     """
@@ -43,10 +47,16 @@ def examine_all_class_student():
     user_name = b.check_login_account("name")
     user_info = db.db_select("user_info.json")
     class_info = db.db_select("class_info.json")
-    for c in user_info[user_name].get("class"):
-        pass
-
+    if len(user_info[user_name].get("class")) == 0:
+        print("{}老师还没有分配班级，请联系管理员".format(user_name))
+        return False
+    else:
+        for c in user_info[user_name].get("class"):
+            if len(class_info[c].get("student")) == 0:
+                print("{}班级没有学生".format(c))
+            else:
+                print("班级名称：{}\n\t学生列表：{}".format(c, ''.join(class_info[c].get("student"))))
 
 
 if __name__ == '__main__':
-    examine_allot_class()
+    examine_all_class_student()

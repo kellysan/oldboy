@@ -29,7 +29,7 @@ def create_login_lock_file(file_info):
 def login(user_name, user_password, count):
     user_info = db.db_select("user_info.json")
     if user_name not in user_info:
-        print("用户没有注册请注册用户,请去注册页面注册用户")
+        print("没有该用户，请和管理员核实信息是否有误")
         return False, 0
     else:
         if user_info[user_name]['login_count'] >= 3:
@@ -97,6 +97,6 @@ def login(user_name, user_password, count):
 
 def logout():
     with open('login.lock', "r") as f:
-        name = f.read().split('\n')
+        name = f.read().strip('\n')
     os.remove('login.lock')
     print("{}用户已经注销".format(name))

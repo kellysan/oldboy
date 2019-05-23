@@ -43,22 +43,22 @@ def examine_all_course():
 
 
 def select_course():
-    user_info = db.db_select("user_info.json")
+    # user_info = db.db_select("user_info.json")
     course_info = db.db_select("course_info.json")
 
     # 打印所有课程
-    examine_all_course()
+    # examine_all_course()
 
         # 输入选择课程
     while True:
+        user_info = db.db_select("user_info.json")
+        examine_all_course()
         course_name = input("请输入要选择的课程，输入q退出选课：")
         if course_name == "q":
             break
         else:
             if course_name in course_info:
                 user_name = b.check_login_account("name")
-                print(user_name)
-                print(user_info[user_name].get("course"))
                 if course_name in user_info[user_name].get("course"):
                     print("您已经选择此课程，请重新输入")
                     continue
@@ -66,7 +66,8 @@ def select_course():
                     user_info[user_name]["course"].append(course_name)
                     db.db_insert("user_info.json", user_info)
 
-                    print("{}学生选择的课程是:\n\t课程列表{}".format(user_name, "||".join(user_info[user_name].get("course"))))
+                    print("{}学生选择的课程是".format(user_name).center(30, '#'))
+                    print("课程列表:{}".format(user_name, "||".join(user_info[user_name].get("course"))))
             else:
                 print("您输入的课程名称有误，请重新输入")
                 continue

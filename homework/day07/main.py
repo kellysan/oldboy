@@ -95,8 +95,11 @@ class Servcie:
                     print("注册功能未开放！:)")
                     continue
                 elif num == 3:
-                    logout()
-                    continue
+                    pass
+                    # logout()
+                    # continue
+                else:
+                    print("首页只能登陆，请输入1")
 
 if __name__ == '__main__':
     s = Servcie()
