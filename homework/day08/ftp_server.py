@@ -4,36 +4,66 @@
 #    File Name：       ftp_server
 #    Description :
 #    Author :          SanYapeng
-#    date：            2019-05-27
-#    Change Activity:  2019-05-27:
+#    date：            2019-05-28
+#    Change Activity:  2019-05-28:
 
+
+import hmac,os
 import socket
-import struct
-import json
-import os
-tcp_server = socket.socket()
-ip_port = ('127.0.0.1',8001)#本机回环地址,供内部程序之间测试用
-tcp_server.bind(ip_port)
-tcp_server.listen(5)
-client_file_path = r'F:\pp'
+import hmac
 
-conn,adddr = tcp_server.accept()
-file_info_stru = conn.recv(4)#首先接收到文件信息长度转换出来的4个字节的数据
-file_info_len = struct.unpack('i',file_info_stru)[0]#解包文件信息的长度
-client_file_info = conn.recv(file_info_len).decode('utf-8')
-abc_file_info = json.loads(client_file_info)#将接收到的json字符串反序列化
-print('abc_file_info>>>',abc_file_info)
-client_file_size = abc_file_info['file_size']
+user_info = {'sanyapeng':871623,'user01':123456}
 
-recv_all_size = 0
-client_full_path = client_file_path + '\\' + abc_file_info['file_name']
-# client_full_path = os.path.join(client_file_path,abc_file_info['file_name'])
-with open(client_full_path,'wb') as f:
-    while recv_all_size < client_file_size:
-        every_recv_data = conn.recv(1024)
-        f.write(every_recv_data)
-        recv_all_size += len(every_recv_data)
 
-conn.send('小伙牛逼啊,上传成功!'.encode('utf-8'))
-conn.close()
-tcp_server.close()
+
+def user_auth(conn, buffer_size):
+    """
+    用户登录认证
+    :param conn:
+    :return:
+    """
+    print("开始验证用户")
+    user_name = conn.recv(buffer_size)
+    print(user_name)
+    if user_name.decode('utf-8') not in user_info:
+        return False
+    h = hmac.new(user_name, str(user_info[user_name.decode('utf-8')]).encode('utf-8'))
+    digest = h.digest()
+    res = conn.recv(len(digest))
+    print(1111, res)
+    return hmac.compare_digest(res, digest)
+
+
+def server_handler(ip_port, buffer_size, backlog=5):
+    """
+    只处理连接
+    :param ip_port: 端口和绑定地址
+    :param buffer_size: 读取的字节
+    :param backlog: 连接客户端数
+    :return:
+    """
+    ftp_socket_server = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)   # ipv4 tcp协议
+    ftp_socket_server.bind(ip_port)
+    ftp_socket_server.listen(backlog)
+    while True:
+        conn, addr = ftp_socket_server.accept()
+        failed_msg = False
+        access_msg = True
+        print("新连接[%s:%s]" % (addr[0],addr[1]))
+        if user_auth(conn, buffer_size) is False:
+            print(22222)
+            conn.send(b'False')
+            continue
+        conn.send(b'True')
+
+        while True:
+            data = conn.recv(buffer_size)
+            print("需要转换的字符为：{}".format(data.decode('utf-8')))
+            if not data:break
+            conn.sendall(data.upper())
+
+
+if __name__ == '__main__':
+    ip_port = ("127.0.0.1",8100)
+    buffer_size = 1024
+    server_handler(ip_port, buffer_size)
