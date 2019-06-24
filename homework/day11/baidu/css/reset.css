@@ -6,6 +6,6 @@ a{
     text-decoration: none;
 }
 input{
-    border: none;
-    outline: none;
+    border: 0;
+    outline: 0;
 }

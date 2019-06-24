@@ -1,0 +1,11 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+}
+input{
+    border: none;  /*不显示边框*/
+    outline: none;
+}
