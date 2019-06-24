@@ -1,0 +1,58 @@
+1 分别列出常见的块级标签和内联标签
+内联标签
+    a      超链接标签
+    img
+    b
+    td
+    span
+块级标签
+
+    h1-h6   标题标签
+    p       段落变迁
+    ul      无序列表
+    ol      有序列表
+    li      列表中的元素
+    dt
+    dd
+    table   表格
+    tr      行
+    form    表单
+    div     段落
+
+2 form 表单提交事项
+    1、在一个form表单中，若只有一个input（不管type是什么），按回车键表单会自动提交，但是当表单中存在多个input时，按回车键不会执行任何操作，这是form表单的一个特性。
+    2、在一个表单中若存在一个input是submit，则按回车表单会提交；如果不想用提交按钮，可以用样式隐藏。
+    3、form标签中添加onSubmit="return false;"则回车键与submit提交失效。
+    4、回车会触发点击事件（相当于点击submit），当处理点击事件应将回车看作一次点击事件。
+
+3 默写本周所有讲过的标签
+    head 定义头部
+    body 文本内容
+    title 标题标签
+    style 文本样式
+    scripts js脚本
+    meta 设置网页字符集
+    link 连接css 元素
+
+    h1 - h6 标题标签
+    p 段落标签
+    br 换行标签
+    table 表格
+        tr 行
+        td 列
+    ul 无序列表
+    ol 有序列表
+    li 列表元素
+    div   定义区块
+    span  为部分文本设置属性
+    input 输入标签
+    form 表单标签
+
+    a 超链接标签
+    img 图片标签
+
+    b 加粗
+    em 着重文字
+    i 斜体文字
+    del 删除线
+
