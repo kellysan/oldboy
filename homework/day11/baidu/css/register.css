@@ -1,0 +1,23 @@
+.head {
+    font-size: 12px;
+    width: 980px;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    height: 75px;
+}
+
+.head_img{
+    #text-align: left;   /*实现图片的水平居中*/
+    vertical-align: middle;
+    line-height: 75px;
+    margin: 15px 0 0 0;
+
+}
+.nav-0{
+    font-size: 22px;
+}
+
+.nav-1{
+    font-size: 22px;
+    line-height: 75px;
+}
