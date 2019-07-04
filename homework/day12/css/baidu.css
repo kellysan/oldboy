@@ -1,0 +1,30 @@
+body {
+    font-family: Tahoma, Helvetica, "Microsoft Yahei", 微软雅黑, Arial, STHeiti;
+    font-size: 14px;}
+form span a{
+    color: #1B66c7
+}
+
+#head{
+    /*没有定义宽度 是否需要定义宽度 在定义margin 20px auto*/
+    height: 55px;
+    margin: 20px 20% 0;
+    background-color: green;
+}
+
+#head_logo{
+    float: left;
+}
+
+#head_login{
+    float: right;
+    background-color: blue;
+}
+.span_style{
+    font-size: 12px;
+    line-height: 55px;
+}
+#nav{
+    margin-left: 260px;
+    height: 40px;
+}

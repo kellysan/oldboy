@@ -1,0 +1,10 @@
+body,div,form,p,input,span,label,img{
+    margin: 0;
+    padding: 0;
+}
+a{
+    text-decoration: none
+}
+input{
+    border: none;
+}
